@@ -37,14 +37,14 @@ class NewsletterWidgetMinimalGdpr extends WP_Widget {
 
 
         $form = '<div class="tnp tnp-widget-minimal tnp-widget tnp-widget-minimal-gdpr">';
-        $form .= '<form action="' . esc_attr(home_url('/')) . '?na=s" method="post" onsubmit="return newsletter_check(this)">';
+        $form .= '<form action="' . esc_attr(home_url('/')) . '?na=s" method="post" novalidate onsubmit="return newsletter_check(this)">';
         if (isset($instance['nl']) && is_array($instance['nl'])) {
             foreach ($instance['nl'] as $a) {
                 $form .= "<input type='hidden' name='nl[]' value='" . ((int) trim($a)) . "'>\n";
             }
         }
         // Referrer
-        $form .= '<input type="hidden" name="nr" value="widget-minimal"/>';
+        $form .= '<input type="hidden" name="nr" value="widget-minimal-gdpr"/>';
 
         $form .= '<div class="tnp-field tnp-field-email">';
         $form .= '<input class="tnp-email" type="email" required name="ne" value="" placeholder="' . esc_attr($options_profile['email']) . '">';
@@ -56,14 +56,16 @@ class NewsletterWidgetMinimalGdpr extends WP_Widget {
             $form .= '<div class="tnp-field tnp-field-privacy">';
             $form .= '<label>';
             if ($privacy_status === 1) {
-                $form .= '<input type="checkbox" name="ny" required class="tnp-privacy">&nbsp;';
+                $form .= '<input type="checkbox" name="ny" required class="tnp-privacy">';
             }
             $url = $newsletterSubscription->get_privacy_url();
             if (!empty($url)) {
-                $form .= '<a target="_blank" href="' . esc_attr($url) . '">';
+                $form .= '<a class="tnp-label-privacy tnp-label-text-link" target="_blank" href="' . esc_attr($url) . '">';
                 $form .= esc_attr($options_profile['privacy']) . '</a>';
             } else {
+                $form .= '<span class="tnp-label-privacy tnp-label-text-nolink">';
                 $form .= esc_html($options_profile['privacy']);
+                $form .= '</span>';
             }
 
             $form .= "</label></div>\n";
